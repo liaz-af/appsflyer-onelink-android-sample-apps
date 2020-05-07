@@ -63,15 +63,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAppOpenAttribution(Map<String, String> conversionData) {
-                if (!conversionData.containsKey("is_first_launch"))
+            public void onAppOpenAttribution(Map<String, String> attributionData) {
+                if (!attributionData.containsKey("is_first_launch"))
                     Log.d(LOG_TAG, "onAppOpenAttribution: This is NOT deferred deep linking");
-                for (String attrName : conversionData.keySet()) {
-                    String deepLinkAttrStr = attrName + " = " + conversionData.get(attrName);
+                for (String attrName : attributionData.keySet()) {
+                    String deepLinkAttrStr = attrName + " = " + attributionData.get(attrName);
                     Log.d(LOG_TAG, "Deeplink attribute: " + deepLinkAttrStr);
                 }
-                Log.d(LOG_TAG, "onAppOpenAttribution: Deep linking into " + conversionData.get("fruit_name"));
-                goToFruit(conversionData.get("fruit_name"), conversionData);
+                Log.d(LOG_TAG, "onAppOpenAttribution: Deep linking into " + attributionData.get("fruit_name"));
+                goToFruit(attributionData.get("fruit_name"), attributionData);
             }
 
             @Override
