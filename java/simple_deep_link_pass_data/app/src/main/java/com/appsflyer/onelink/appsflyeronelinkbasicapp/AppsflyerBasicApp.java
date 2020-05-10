@@ -5,7 +5,7 @@ import android.app.Application;
 import com.appsflyer.AppsFlyerLib;
 
 public class AppsflyerBasicApp extends Application {
-    public static final String LOG_TAG = "AppsflyerBasicApp";
+    public static final String LOG_TAG = "AppsFlyerBasicApp";
     @Override
     public void onCreate() {
         super.onCreate();
