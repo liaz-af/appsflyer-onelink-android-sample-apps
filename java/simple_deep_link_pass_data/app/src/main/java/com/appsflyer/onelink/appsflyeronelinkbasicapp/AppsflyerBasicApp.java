@@ -10,7 +10,8 @@ public class AppsflyerBasicApp extends Application {
     public void onCreate() {
         super.onCreate();
         //noinspection SpellCheckingInspection
-        String afDevKey = "dQnXTbxz7UyXL7sy2rvgx";
+        // TODO - Feel you afDevKey - https://support.appsflyer.com/hc/en-us/articles/207032126-Android-SDK-integration-for-developers#integration-31-retrieving-your-dev-key
+        String afDevKey = "XXXXXXXXXXXXXXX";
         AppsFlyerLib appsflyer = AppsFlyerLib.getInstance();
         appsflyer.setMinTimeBetweenSessions(0);
         appsflyer.init(afDevKey, null, this);
