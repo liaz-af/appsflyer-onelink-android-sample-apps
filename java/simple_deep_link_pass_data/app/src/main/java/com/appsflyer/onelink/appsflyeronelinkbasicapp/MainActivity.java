@@ -100,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
     private void goToFruit(String fruitName, Map<String, String> dlData) {
         String fruitClassName = fruitName.concat("Activity");
         try {
-            Class fruitClass = Class.forName("com.appsflyer.onelink.appsflyeronelinkbasicapp.".concat(fruitClassName));
+            Class fruitClass = Class.forName(this.getPackageName().concat(".").concat(fruitClassName));
+            Log.d(LOG_TAG, "Looking for class " + fruitClass);
             Intent intent = new Intent(getApplicationContext(), fruitClass);
             if (dlData != null) {
                 // Map is casted HashMap since it is easier to pass serializable data to an intent
