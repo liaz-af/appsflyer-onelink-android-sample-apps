@@ -2,6 +2,13 @@
 Android sample apps which demonstrate the usage of Appsflyer Onelink - A unified deep-linking solution.
 This repository gives you sample apps to get you started easily with OneLink.
 
+## Table of Contents
+| Sample app | Use-case | Features | Technology |
+| ---        | ---      | ---      | ---        |
+| [Fruit Store] | e-commerce | Basic OneLink Sample | <ul><li>Android App Links</li><li>URI scheme</li></ul> | 
+
+[Fruit Store]: ./java/basic_app
+
 # Getting Started with OneLink
 Deep linking is the act of launching a mobile app while serving personalized content and/or sending the users to specific activities within the app. By doing so you provide users with superior user experience, greatly enhancing their engagement with the apps.
 
