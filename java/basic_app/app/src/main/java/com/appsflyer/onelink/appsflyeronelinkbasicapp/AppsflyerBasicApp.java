@@ -85,11 +85,9 @@ public class AppsflyerBasicApp extends Application {
                     Log.d(LOG_TAG, "DeepLink data came back null");
                     return;
                 }
-                // TODO - Custom params
-//                    String fruitName = deepLinkObj.getCustomParams().getString("fruit_name");
-                // TODO - af_subX support
-//                String fruitName = deepLinkObj.getAfSub5();
-                String fruitName = "apples";
+                // TODO - Add example for is_deferred
+                // TODO - Add example for generic getter
+                String fruitName = deepLinkObj.getAfSub5();
                 goToFruit(fruitName, deepLinkObj);
             }
         });
