@@ -6,19 +6,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
 import com.appsflyer.deeplink.DeepLink;
 import com.appsflyer.deeplink.DeepLinkListener;
 import com.appsflyer.deeplink.DeepLinkResult;
-import com.appsflyer.onelink.appsflyeronelinkbasicapp.AppsFlyerConstants;
 import com.google.gson.Gson;
-
-import org.json.JSONException;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 public class AppsflyerBasicApp extends Application {
     public static final String LOG_TAG = "AppsFlyerFeedMeApp";
@@ -33,46 +25,6 @@ public class AppsflyerBasicApp extends Application {
         appsflyer.init(afDevKey, null, this);
         appsflyer.start(this, afDevKey);
         appsflyer.setDebugLog(true);
-
-//        appsflyer.registerConversionListener(this, new AppsFlyerConversionListener() {
-//            @Override
-//            public void onConversionDataSuccess(Map<String, Object> conversionData) {
-//                for (String attrName : conversionData.keySet())
-//                    Log.d(LOG_TAG, "Conversion attribute: " + attrName + " = " + conversionData.get(attrName));
-//                String status = Objects.requireNonNull(conversionData.get("af_status")).toString();
-//                if(status.equals("Non-organic")){
-//                    if( Objects.requireNonNull(conversionData.get("is_first_launch")).toString().equals("true")){
-//                        Log.d(LOG_TAG,"Conversion: First Launch");
-//                    } else {
-//                        Log.d(LOG_TAG,"Conversion: Not First Launch");
-//                    }
-//                } else {
-//                    Log.d(LOG_TAG,"Conversion: This is an organic install.");
-//                }
-//            }
-//
-//            @Override
-//            public void onConversionDataFail(String errorMessage) {
-//                Log.d(LOG_TAG, "error getting conversion data: " + errorMessage);
-//            }
-//
-//            @Override
-//            public void onAppOpenAttribution(Map<String, String> attributionData) {
-//                if (!attributionData.containsKey("is_first_launch"))
-//                    Log.d(LOG_TAG, "onAppOpenAttribution: This is NOT deferred deep linking");
-//                for (String attrName : attributionData.keySet()) {
-//                    String deepLinkAttrStr = attrName + " = " + attributionData.get(attrName);
-//                    Log.d(LOG_TAG, "Deeplink attribute: " + deepLinkAttrStr);
-//                }
-////                Log.d(LOG_TAG, "onAppOpenAttribution: Deep linking into " + attributionData.get("fruit_name"));
-////                goToFruit(attributionData.get("fruit_name"), attributionData);
-//            }
-//
-//            @Override
-//            public void onAttributionFailure(String errorMessage) {
-//                Log.d(LOG_TAG, "error onAttributionFailure : " + errorMessage);
-//            }
-//        });
 
         appsflyer.subscribeForDeepLink(new DeepLinkListener(){
             @Override
