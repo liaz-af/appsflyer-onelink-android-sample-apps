@@ -44,7 +44,11 @@
 
                 <data
                     android:host="onelink-basic-app.onelink.me"
-                    android:pathPrefix="/H5hv"
+                    android:pathPattern=".*"
+                    android:scheme="https" />
+                <data
+                    android:host="vsco-fruit.customlinks-stg.appsflyer.com"
+                    android:pathPattern=".*"
                     android:scheme="https" />
             </intent-filter>
         </activity>

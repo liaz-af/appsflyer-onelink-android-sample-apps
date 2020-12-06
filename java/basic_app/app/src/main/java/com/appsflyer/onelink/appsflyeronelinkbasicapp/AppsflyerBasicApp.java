@@ -97,6 +97,7 @@ public class AppsflyerBasicApp extends Application {
             }
         };
 
+        AppsFlyerLib.getInstance().setResolveDeepLinkURLs("vsco-fruit.customlinks-stg.appsflyer.com");
         appsflyer.init(afDevKey, conversionListener, this);
         appsflyer.start(this, afDevKey);
     }
