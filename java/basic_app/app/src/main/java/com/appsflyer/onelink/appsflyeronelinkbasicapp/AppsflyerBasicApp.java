@@ -1,5 +1,8 @@
 package com.appsflyer.onelink.appsflyeronelinkbasicapp;
 
+import com.appsflyer.AppsFlyerLib;
+
+
 import android.app.Application;
 import android.content.Intent;
 import android.util.Log;
@@ -17,5 +20,12 @@ public class AppsflyerBasicApp extends Application {
 
     public void onCreate() {
         super.onCreate();
+
+        AppsFlyerLib appsflyer = AppsFlyerLib.getInstance();
+        // For debug - remove in production
+        appsflyer.setDebugLog(true);
+
+        appsflyer.init("sQ84wpdxRTR4RMCaE9YqS4", null, this);
+        appsflyer.start(this);
     }
 }
