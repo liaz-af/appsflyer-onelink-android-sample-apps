@@ -139,4 +139,16 @@ public class AppsflyerBasicApp extends Application {
             e.printStackTrace();
         }
     }
+
+    public DeepLink mapToDeepLinkObject(Map <String, Object> conversionDataMap){
+        try {
+            String objToStr = new Gson().toJson(conversionDataMap);
+            DeepLink deepLink = DeepLink.AFKeystoreWrapper(new JSONObject(objToStr));
+            return deepLink;
+        }
+        catch (org.json.JSONException e ){
+            Log.d(LOG_TAG, "Error when converting map to DeepLink object: " + e.toString());
+        }
+        return null;
+    }
 }
