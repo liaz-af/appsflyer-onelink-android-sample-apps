@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import io.branch.referral.Branch;
+import io.branch.referral.BranchLogger;
 
 public class AppsflyerBasicApp extends Application {
     public static final String LOG_TAG = "AppsFlyerOneLinkSimApp";
@@ -28,7 +29,7 @@ public class AppsflyerBasicApp extends Application {
         super.onCreate();
 
         // Branch logging for debugging
-        Branch.enableLogging();
+        Branch.enableLogging(BranchLogger.BranchLogLevel.VERBOSE);
 
         // Branch object initialization
         Branch.getAutoInstance(this);
