@@ -66,10 +66,6 @@ public class MainActivity extends AppCompatActivity {
                     boolean isBranchDeeplink = branchUniversalObject != null;
                     if (isBranchDeeplink) {
                         // Deep link flow
-                        Log.i("BranchSDK_Tester", "title " + branchUniversalObject.getTitle());
-                        Log.i("BranchSDK_Tester", "CanonicalIdentifier " + branchUniversalObject.getCanonicalIdentifier());
-                        Log.i("BranchSDK_Tester", "metadata " + branchUniversalObject.getContentMetadata().convertToJson());
-
                         JSONObject sessionParams = branchUniversalObject.getContentMetadata().convertToJson();
                         try {
                             boolean isFirstSession = Boolean.parseBoolean(sessionParams.getString("+is_first_session"));
@@ -100,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     if (linkProperties != null) {
-                        Log.i("BranchSDK_Tester", "Channel " + linkProperties.getChannel());
                         Log.i("BranchSDK_Tester", "control params " + linkProperties.getControlParams());
                     } else {
                         Log.i("BranchSDK_Tester", "@@@@ linkProperties came back null");
@@ -110,16 +105,6 @@ public class MainActivity extends AppCompatActivity {
         }).withData(this.getIntent().getData()).init();
         // init the LATD call from inside the session initialization callback
 
-    }
-
-    private void collectLatdFromBranch(Runnable onCollected) {
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Branch.getInstance().getLastAttributedTouchData((jsonObject, error) -> {
-                // Read the data from the jsonObject
-                AppsFlyerMigrationHelper.setAttributionData(jsonObject);
-                onCollected.run();
-            }, 7);
-        }, 3000);
     }
 
     public void goToApples(View view) {
