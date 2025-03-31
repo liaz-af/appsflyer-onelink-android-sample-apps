@@ -10,8 +10,6 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import static com.kuku.muku.kukumukubasicapp.AppsflyerBasicApp.LOG_TAG;
-import static com.kuku.muku.kukumukubasicapp.PreferencesHelper.isBranchLATDCollected;
-import static com.kuku.muku.kukumukubasicapp.PreferencesHelper.setBranchLATDCollected;
 
 import com.appsflyer.AppsFlyerLib;
 import com.appsflyer.migration.AppsFlyerMigrationHelper;
@@ -23,7 +21,6 @@ import org.json.JSONObject;
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
-import io.branch.referral.ServerRequestGetLATD;
 import io.branch.referral.util.LinkProperties;
 
 public class MainActivity extends AppCompatActivity {
@@ -60,39 +57,46 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError error) {
 
-                boolean isDeeplinkScenario = branchUniversalObject != null;
-                if (isBranchLATDCollected(MainActivity.this) && isDeeplinkScenario) {
-                    // Not a first start, need to collect deeplinking data
-                    AppsFlyerMigrationHelper.setDeepLinkingData(Branch.getInstance().getLatestReferringParams());
-                }
-
-                collectAndStartAppsFlyer();
-
-
                 if (error != null) {
+                    // Branch init failed. Start AppsFlyer immediately
                     Log.e("BranchSDK_Tester", "branch init failed. Caused by -" + error.getMessage());
+                    AppsFlyerLib.getInstance().start(MainActivity.this);
                 } else {
                     Log.i("BranchSDK_Tester", "branch init complete!");
-                    Log.i("BranchSDK_Tester", "****** Im here 000000");
-                    if (branchUniversalObject != null) {
-                        Log.i("BranchSDK_Tester", "****** Im here 1111111");
+                    boolean isBranchDeeplink = branchUniversalObject != null;
+                    if (isBranchDeeplink) {
+                        // Deep link flow
                         Log.i("BranchSDK_Tester", "title " + branchUniversalObject.getTitle());
                         Log.i("BranchSDK_Tester", "CanonicalIdentifier " + branchUniversalObject.getCanonicalIdentifier());
                         Log.i("BranchSDK_Tester", "metadata " + branchUniversalObject.getContentMetadata().convertToJson());
 
                         JSONObject sessionParams = branchUniversalObject.getContentMetadata().convertToJson();
-
-                        Log.i("BranchSDK_Tester", "****** Im here 222222");
-
                         try {
+                            boolean isFirstSession = Boolean.parseBoolean(sessionParams.getString("+is_first_session"));
+                            if(isFirstSession) {
+                                // Deferred deep link
+                                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                    Branch.getInstance().getLastAttributedTouchData((jsonObject, latd_error) -> {
+                                        // Read the data from the LATD jsonObject
+                                        AppsFlyerMigrationHelper.setAttributionData(jsonObject);
+                                        // On LATD collected
+                                        AppsFlyerLib.getInstance().start(MainActivity.this);
+                                    }, 7);
+                                }, 3000);
+                            } else {
+                                // Direct deep link
+                                AppsFlyerMigrationHelper.setDeepLinkingData(Branch.getInstance().getLatestReferringParams());
+                                AppsFlyerLib.getInstance().start(MainActivity.this);
+                            }
                             goToFruit(sessionParams.getString("fruit_name"));
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
 
                     } else {
+                        // Organic install or launch
                         Log.i("BranchSDK_Tester", "@@@@ branchUniversalObject came back null");
-                        Log.i("BranchSDK_Tester", "****** Im here 4444444");
+                        AppsFlyerLib.getInstance().start(MainActivity.this);
                     }
 
                     if (linkProperties != null) {
@@ -106,25 +110,6 @@ public class MainActivity extends AppCompatActivity {
         }).withData(this.getIntent().getData()).init();
         // init the LATD call from inside the session initialization callback
 
-//        getFirstReferringBranchUniversalObject();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    public void collectAndStartAppsFlyer() {
-        if (isBranchLATDCollected(this)) {
-            // This is not the first session, no need to collect LATD, start AF right away
-            AppsFlyerLib.getInstance().start(this);
-        } else {
-            collectLatdFromBranch(() -> {
-                // On LATD collected
-                AppsFlyerLib.getInstance().start(this);
-            });
-            setBranchLATDCollected(this, true);
-        }
     }
 
     private void collectLatdFromBranch(Runnable onCollected) {
